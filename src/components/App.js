@@ -28,11 +28,13 @@ class App extends Component {
         this.goToLocation = this.goToLocation.bind(this);
         this.removePlace = this.removePlace.bind(this);
         this.markAsVisited = this.markAsVisited.bind(this);
+        this.onFilterChange = this.onFilterChange.bind(this);
 
         this.state = {
             markers: [],
             modalIsOpen: false,
             modalInputValue: '',
+            filterValue: '',
             currentMarkerID: null,
             mapCenter: {
                 lat: 40.17956771440295,
@@ -137,6 +139,13 @@ class App extends Component {
         })
     }
 
+    //
+    onFilterChange(e){
+        this.setState({
+            filterValue: e.target.value
+        })
+    }
+
     //Setting App element to modal for avoiding warnings. That should have been default
     //however there is some kind of bug in the lib right now, github issue was opened
     componentWillMount() {
@@ -162,6 +171,8 @@ class App extends Component {
                         goToLocation={this.goToLocation}
                         removePlace={this.removePlace}
                         markAsVisited={this.markAsVisited}
+                        onFilterChange={this.onFilterChange}
+                        filterValue={this.state.filterValue}
                     />
                 </div>
                 <Modal
