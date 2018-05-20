@@ -26,6 +26,8 @@ class App extends Component {
         this.confirmAddPlace = this.confirmAddPlace.bind(this);
         this.cancelAddPlace = this.cancelAddPlace.bind(this);
         this.goToLocation = this.goToLocation.bind(this);
+        this.removePlace = this.removePlace.bind(this);
+        this.markAsVisited = this.markAsVisited.bind(this);
 
         this.state = {
             markers: [],
@@ -55,7 +57,8 @@ class App extends Component {
                     id: markerID,
                     label: '',
                     position: { lat, lng },
-                    labelAnchor: new window.google.maps.Point(0, 60)
+                    labelAnchor: new window.google.maps.Point(0, 60),
+                    isVisited: false
                 }
             ]
         });
@@ -110,6 +113,30 @@ class App extends Component {
         })
     }
 
+    //handler for removing a selected place
+    removePlace(e, markerID) {
+        const filteredMarkers = this.state.markers.filter(marker => marker.id !== markerID);
+        this.setState({
+            markers: [
+                ...filteredMarkers
+            ]
+        })
+    }
+
+    //handler for marking place as visited
+    markAsVisited(e, markerID) {
+        const filteredMarkers = this.state.markers.filter(marker => marker.id !== markerID);
+        const currentMarker = this.state.markers.filter(marker => marker.id === markerID)[0];
+        const updatedMarker = Object.assign({}, currentMarker, {isVisited: true});
+
+        this.setState({
+            markers: [
+                ...filteredMarkers,
+                updatedMarker
+            ]
+        })
+    }
+
     //Setting App element to modal for avoiding warnings. That should have been default
     //however there is some kind of bug in the lib right now, github issue was opened
     componentWillMount() {
@@ -119,6 +146,7 @@ class App extends Component {
     render() {
         return (
             <div className="app">
+                <h2>ToGo List App</h2>
                 <div className="app-content">
                     <GoogleMap
                         googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places'
@@ -132,6 +160,8 @@ class App extends Component {
                     <Places
                         markers={this.state.markers}
                         goToLocation={this.goToLocation}
+                        removePlace={this.removePlace}
+                        markAsVisited={this.markAsVisited}
                     />
                 </div>
                 <Modal
