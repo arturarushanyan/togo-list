@@ -6,14 +6,15 @@ import { MarkerWithLabel } from 'react-google-maps/lib/components/addons/MarkerW
 export default withScriptjs(withGoogleMap((props) => (
         <GoogleMap
             defaultZoom={16}
-            defaultCenter={{ lat: 40.17956771440295, lng: 44.51704104658768 }}
+            defaultCenter={props.mapCenter}
+            center={props.mapCenter}
             onClick={(e) => props.handleClick(e)}
         >
             {
-                props.markers.map((marker, index) => {
+                props.markers.map((marker) => {
                     return (
                         <MarkerWithLabel
-                            key={index}
+                            key={marker.id}
                             position={marker.position}
                             labelAnchor={marker.labelAnchor}
                             labelStyle={{backgroundColor: "yellow", fontSize: "13px", padding: "5px"}}
