@@ -15,6 +15,7 @@ button {
   padding-left: 5px;
   border-radius: 4px;
   color: #000;
+  cursor: pointer;
 }
 
 button.confirm {
@@ -69,6 +70,11 @@ button.cancel, .btn-remove {
   padding: 5px;
   border-radius: 4px;
   margin: 10px 0;
+  cursor: pointer;
+}
+
+.place-item div {
+  padding: 10px 0;
 }
 
 .place-item.visited {
