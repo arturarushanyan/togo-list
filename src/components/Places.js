@@ -3,7 +3,7 @@ import shortID from 'short-id-gen';
 
 export default (props) => {
     const filteredPlacesToVisit = props.markers.filter((place) => {
-        return place.label.indexOf(props.filterValue) !== -1
+        return place.label.toLowerCase().indexOf(props.filterValue.toLowerCase()) !== -1
     });
 
     const placesToVisit = filteredPlacesToVisit.map((marker) => {
@@ -23,7 +23,9 @@ export default (props) => {
     return (
         <div className="places-list">
             <h3>Places that you want to visit</h3>
-            <input type="text" placeholder="Filter Place" onChange={props.onFilterChange} value={props.filterValue}/>
+            <div className="filter-wrap">
+                <input type="text" placeholder="Filter Place..." onChange={props.onFilterChange} value={props.filterValue}/>
+            </div>
         {
             props.markers.length ?
                 placesToVisit :

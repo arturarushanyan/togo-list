@@ -3,18 +3,8 @@ import GoogleMap from './GoogleMap';
 import Modal from 'react-modal';
 import Places from './Places';
 import shortID from 'short-id-gen';
+import config from '../config';
 import '../App.css';
-
-const customStyles = {
-    content : {
-        top                   : '50%',
-        left                  : '50%',
-        right                 : 'auto',
-        bottom                : 'auto',
-        marginRight           : '-50%',
-        transform             : 'translate(-50%, -50%)'
-    }
-};
 
 class App extends Component {
     constructor(props){
@@ -83,7 +73,7 @@ class App extends Component {
         });
     }
 
-    //by canceling add place I'm just filtring current marker from the state object
+    //by canceling add place I'm just filtering current marker from the state object
     //then closing modal and resetting the input value and markerID
     cancelAddPlace() {
         const filteredMarkers = this.state.markers.filter(marker => marker.id !== this.state.currentMarkerID);
@@ -139,7 +129,7 @@ class App extends Component {
         })
     }
 
-    //
+    //handler for filtering places
     onFilterChange(e){
         this.setState({
             filterValue: e.target.value
@@ -157,33 +147,38 @@ class App extends Component {
             <div className="app">
                 <h2>ToGo List App</h2>
                 <div className="app-content">
-                    <GoogleMap
-                        googleMapURL='https://maps.googleapis.com/maps/api/js?key=AIzaSyC4R6AN7SmujjPUIGKdyao2Kqitzr1kiRg&v=3.exp&libraries=geometry,drawing,places'
-                        loadingElement={<div style={{ height: `100%` }} />}
-                        containerElement={<div style={{ width: `70%`,height: `400px` }} />}
-                        mapElement={<div style={{ height: `100%` }} />}
-                        handleClick={this.handleClick}
-                        markers={this.state.markers}
-                        mapCenter={this.state.mapCenter}
-                    />
-                    <Places
-                        markers={this.state.markers}
-                        goToLocation={this.goToLocation}
-                        removePlace={this.removePlace}
-                        markAsVisited={this.markAsVisited}
-                        onFilterChange={this.onFilterChange}
-                        filterValue={this.state.filterValue}
-                    />
+                    <div className="app-grid-item">
+                        <GoogleMap
+                            googleMapURL={config.mapConfig.googleMapURL}
+                            loadingElement={<div style={config.stylesConfig.loadingElement} />}
+                            containerElement={<div style={config.stylesConfig.containerElement} />}
+                            mapElement={<div style={config.stylesConfig.mapElement} />}
+                            handleClick={this.handleClick}
+                            markers={this.state.markers}
+                            mapCenter={this.state.mapCenter}
+                        />
+                    </div>
+                    <div className="app-grid-item places">
+                        <Places
+                            markers={this.state.markers}
+                            goToLocation={this.goToLocation}
+                            removePlace={this.removePlace}
+                            markAsVisited={this.markAsVisited}
+                            onFilterChange={this.onFilterChange}
+                            filterValue={this.state.filterValue}
+                        />
+                    </div>
+
                 </div>
                 <Modal
                     isOpen={this.state.modalIsOpen}
-                    style={customStyles}
+                    style={config.stylesConfig.modalCustomStyles}
                     contentLabel="Places Modal"
                 >
                     <h4>Name Your selected place</h4>
                     <input type="text" onChange={this.onModalInputChange} value={this.state.modalInputValue}/>
-                    <button onClick={this.confirmAddPlace}>Confirm</button>
-                    <button onClick={this.cancelAddPlace}>Cancel</button>
+                    <button className="confirm" onClick={this.confirmAddPlace}>Confirm</button>
+                    <button className="cancel" onClick={this.cancelAddPlace}>Cancel</button>
                 </Modal>
             </div>
         )
